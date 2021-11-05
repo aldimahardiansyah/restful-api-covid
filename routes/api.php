@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientsController;
+use App\Models\Patients;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // get all resource
 Route::get('/patients', [PatientsController::class, 'index']);
+Route::post('/patients', [PatientsController::class, 'store']);
