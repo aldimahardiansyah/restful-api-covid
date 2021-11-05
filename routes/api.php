@@ -22,4 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // get all resource
 Route::get('/patients', [PatientsController::class, 'index']);
+
+// add resource
 Route::post('/patients', [PatientsController::class, 'store']);
+
+// get detail resource
+Route::get('/patients/{id}', [PatientsController::class, 'show']);

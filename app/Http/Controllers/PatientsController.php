@@ -12,6 +12,7 @@ class PatientsController extends Controller
         $patients = Patients::all();
         return response()->json($patients, 200);
     }
+
     function store(Request $request)
     {
         $input = [
@@ -28,5 +29,22 @@ class PatientsController extends Controller
             'data' => $patient
         ];
         return response()->json($data, 201);
+    }
+
+    function show($id)
+    {
+        $patient = Patients::find($id);
+        if ($patient) {
+            $data = [
+                'message' => 'Show detail patient',
+                'data' => $patient
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                'message' => "Patient not found"
+            ];
+            return response()->json($data, 404);
+        }
     }
 }
