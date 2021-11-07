@@ -17,7 +17,7 @@ class PatientsController extends Controller
 
         if (count($patients) > 0) {
             $data = [
-                'message' => 'Get all patients',
+                'message' => 'Get All Resource',
                 'data' => $patients
             ];
 
@@ -25,11 +25,11 @@ class PatientsController extends Controller
             return response()->json($data, 200);
         } else {
             $data = [
-                'message' => "table is empty"
+                'message' => "Data is empty"
             ];
 
-            # mengembalika data (json) dan kode 201
-            return response()->json($data, 204);
+            # mengembalika data (json) dan kode 200
+            return response()->json($data, 200);
         }
     }
 
@@ -49,7 +49,7 @@ class PatientsController extends Controller
         #menggunakan model Patients untuk insert data
         $patient = Patients::create($input);
         $data = [
-            'message' => 'Data has added',
+            'message' => 'Resource is added successfully',
             'data' => $patient
         ];
 
@@ -65,7 +65,7 @@ class PatientsController extends Controller
 
         if ($patient) {
             $data = [
-                'message' => 'Get detail patient',
+                'message' => 'Get Detail Resource',
                 'data' => $patient
             ];
 
@@ -73,7 +73,7 @@ class PatientsController extends Controller
             return response()->json($data, 200);
         } else {
             $data = [
-                'message' => "Data not found"
+                'message' => "Resource not found"
             ];
 
             # mengembalikan kode 404
@@ -102,15 +102,15 @@ class PatientsController extends Controller
             $patient->update($input);
 
             $data = [
-                'message' => 'Data is updated',
+                'message' => 'Resource is update successfully',
                 'data' => $patient
             ];
 
-            # mengembalikan data (json) dan kode 201
-            return response()->json($data, 201);
+            # mengembalikan data (json) dan kode 200
+            return response()->json($data, 200);
         } else {
             $data = [
-                'message' => "Data not found"
+                'message' => "Resource not found"
             ];
 
             # mengembalikan kode 404
@@ -129,14 +129,14 @@ class PatientsController extends Controller
             $patient->delete();
 
             $data = [
-                'message' => "Data has deleted"
+                'message' => "Resource is delete successfully"
             ];
 
             # mengembalikan pesan dan kode 200
             return response()->json($data, 200);
         } else {
             $data = [
-                'message' => "Data not found"
+                'message' => "Resource not found"
             ];
 
             # mengembalikan pesan dan kode 404
@@ -152,7 +152,7 @@ class PatientsController extends Controller
 
         if (count($patients) > 0) {
             $data = [
-                'message' => "result: $name",
+                'message' => "Get searched resource",
                 'data' => $patients
             ];
 
@@ -160,7 +160,7 @@ class PatientsController extends Controller
             return response()->json($data, 200);
         } else {
             $data = [
-                'message' => "Data not found"
+                'message' => "Resource not found"
             ];
 
             # mengembalikan pesan dan kode 404
@@ -174,9 +174,13 @@ class PatientsController extends Controller
         # mencari patients berdasarkan status
         $patients = Patients::where('status', $status)->get();
 
-        if (count($patients) > 0) {
+        # menghitung total hasil pencarian
+        $total = count($patients);
+
+        if ($total > 0) {
             $data = [
-                'message' => "get $status patients",
+                'message' => "Get $status Resource",
+                'total' => $total,
                 'data' => $patients
             ];
 
@@ -184,7 +188,7 @@ class PatientsController extends Controller
             return response()->json($data, 200);
         } else {
             $data = [
-                'message' => "Data not found"
+                'message' => "Resource not found"
             ];
 
             # mengembalikan kode 404
