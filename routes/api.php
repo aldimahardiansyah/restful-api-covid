@@ -33,3 +33,6 @@ Route::put('/patients/{id}', [PatientsController::class, 'update']);
 
 // delete resource
 Route::delete('/patients/{id}', [PatientsController::class, 'destroy']);
+
+// search resource by name
+Route::get('/patients/{name}', [PatientsController::class, 'search']);

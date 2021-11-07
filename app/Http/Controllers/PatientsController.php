@@ -10,7 +10,11 @@ class PatientsController extends Controller
     function index()
     {
         $patients = Patients::all();
-        return response()->json($patients, 200);
+        $data = [
+            'message' => 'Get all patients',
+            'data' => $patients
+        ];
+        return response()->json($data, 200);
     }
 
     function store(Request $request)
@@ -33,18 +37,22 @@ class PatientsController extends Controller
 
     function show($id)
     {
-        $patient = Patients::find($id);
-        if ($patient) {
-            $data = [
-                'message' => 'Show detail patient',
-                'data' => $patient
-            ];
-            return response()->json($data, 200);
+        if (!is_numeric($id)) {
+            return $this->search($id);
         } else {
-            $data = [
-                'message' => "Data not found"
-            ];
-            return response()->json($data, 404);
+            $patient = Patients::find($id);
+            if ($patient) {
+                $data = [
+                    'message' => 'Get detail patient',
+                    'data' => $patient
+                ];
+                return response()->json($data, 200);
+            } else {
+                $data = [
+                    'message' => "Data not found"
+                ];
+                return response()->json($data, 404);
+            }
         }
     }
 
@@ -62,7 +70,7 @@ class PatientsController extends Controller
             ];
             $patient->update($input);
             $data = [
-                'message' => 'Data has updated',
+                'message' => 'Data is updated',
                 'data' => $patient
             ];
             return response()->json($data, 201);
@@ -83,6 +91,24 @@ class PatientsController extends Controller
 
             $data = [
                 'message' => "Data has deleted"
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                'message' => "Data not found"
+            ];
+            return response()->json($data, 404);
+        }
+    }
+
+    function search($name)
+    {
+        $patients = Patients::where('name', 'LIKE', "%$name%")->get();
+
+        if (count($patients) > 0) {
+            $data = [
+                'message' => "result: $name",
+                'data' => $patients
             ];
             return response()->json($data, 200);
         } else {
