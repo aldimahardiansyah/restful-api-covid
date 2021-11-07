@@ -47,4 +47,30 @@ class PatientsController extends Controller
             return response()->json($data, 404);
         }
     }
+
+    function update($id, Request $request)
+    {
+        $patient = Patients::find($id);
+        if ($patient) {
+            $input = [
+                'name' => $request->name ?? $patient->name,
+                'phone' => $request->phone ?? $patient->phone,
+                'alamat' => $request->alamat ?? $patient->alamat,
+                'status' => $request->status ?? $patient->status,
+                'in_date_at' => $request->in_date_at ?? $patient->in_date_at,
+                'out_date_at' => $request->out_date_at ?? $patient->out_date_at
+            ];
+            $patient->update($input);
+            $data = [
+                'message' => 'Patient has updated',
+                'data' => $patient
+            ];
+            return response()->json($data, 201);
+        } else {
+            $data = [
+                'message' => "Patient not found"
+            ];
+            return response()->json($data, 404);
+        }
+    }
 }

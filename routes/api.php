@@ -28,3 +28,6 @@ Route::post('/patients', [PatientsController::class, 'store']);
 
 // get detail resource
 Route::get('/patients/{id}', [PatientsController::class, 'show']);
+
+// edit resource
+Route::put('/patients/{id}', [PatientsController::class, 'update']);
