@@ -37,23 +37,23 @@ class PatientsController extends Controller
 
     function show($id)
     {
-        if (!is_numeric($id)) {
-            return $this->search($id);
+        // if (!is_numeric($id)) {
+        //     return $this->search($id);
+        // } else {
+        $patient = Patients::find($id);
+        if ($patient) {
+            $data = [
+                'message' => 'Get detail patient',
+                'data' => $patient
+            ];
+            return response()->json($data, 200);
         } else {
-            $patient = Patients::find($id);
-            if ($patient) {
-                $data = [
-                    'message' => 'Get detail patient',
-                    'data' => $patient
-                ];
-                return response()->json($data, 200);
-            } else {
-                $data = [
-                    'message' => "Data not found"
-                ];
-                return response()->json($data, 404);
-            }
+            $data = [
+                'message' => "Data not found"
+            ];
+            return response()->json($data, 404);
         }
+        // }
     }
 
     function update($id, Request $request)

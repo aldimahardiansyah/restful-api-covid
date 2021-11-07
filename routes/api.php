@@ -35,4 +35,4 @@ Route::put('/patients/{id}', [PatientsController::class, 'update']);
 Route::delete('/patients/{id}', [PatientsController::class, 'destroy']);
 
 // search resource by name
-Route::get('/patients/{name}', [PatientsController::class, 'search']);
+Route::get('/patients/search/{name}', [PatientsController::class, 'search']);
