@@ -15,9 +15,13 @@ class PatientsController extends Controller
         # menggunakan model Patients untuk select data
         $patients = Patients::all();
 
-        if (count($patients) > 0) {
+        # menghitung total resource
+        $total = count($patients);
+
+        if ($total > 0) {
             $data = [
                 'message' => 'Get All Resource',
+                'total' => $total,
                 'data' => $patients
             ];
 
