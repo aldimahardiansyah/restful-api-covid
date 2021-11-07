@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientsController;
-use App\Models\Patients;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +30,6 @@ Route::get('/patients/{id}', [PatientsController::class, 'show']);
 
 // edit resource
 Route::put('/patients/{id}', [PatientsController::class, 'update']);
+
+// delete resource
+Route::delete('/patients/{id}', [PatientsController::class, 'destroy']);

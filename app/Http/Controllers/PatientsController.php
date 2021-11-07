@@ -25,7 +25,7 @@ class PatientsController extends Controller
         ];
         $patient = Patients::create($input);
         $data = [
-            'message' => 'Patient has added',
+            'message' => 'Data has added',
             'data' => $patient
         ];
         return response()->json($data, 201);
@@ -42,7 +42,7 @@ class PatientsController extends Controller
             return response()->json($data, 200);
         } else {
             $data = [
-                'message' => "Patient not found"
+                'message' => "Data not found"
             ];
             return response()->json($data, 404);
         }
@@ -62,13 +62,32 @@ class PatientsController extends Controller
             ];
             $patient->update($input);
             $data = [
-                'message' => 'Patient has updated',
+                'message' => 'Data has updated',
                 'data' => $patient
             ];
             return response()->json($data, 201);
         } else {
             $data = [
-                'message' => "Patient not found"
+                'message' => "Data not found"
+            ];
+            return response()->json($data, 404);
+        }
+    }
+
+    function destroy($id)
+    {
+        $patient =  Patients::find($id);
+
+        if ($patient) {
+            $patient->delete();
+
+            $data = [
+                'message' => "Data has deleted"
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                'message' => "Data not found"
             ];
             return response()->json($data, 404);
         }
