@@ -25,9 +25,6 @@ Route::get('/patients', [PatientsController::class, 'index']);
 // add resource
 Route::post('/patients', [PatientsController::class, 'store']);
 
-// get detail resource
-Route::get('/patients/{id}', [PatientsController::class, 'show']);
-
 // edit resource
 Route::put('/patients/{id}', [PatientsController::class, 'update']);
 
@@ -36,3 +33,15 @@ Route::delete('/patients/{id}', [PatientsController::class, 'destroy']);
 
 // search resource by name
 Route::get('/patients/search/{name}', [PatientsController::class, 'search']);
+
+// get positive resource
+Route::get('/patients/positive', [PatientsController::class, 'positive']);
+
+// get recovered resource
+Route::get('/patients/recovered', [PatientsController::class, 'recovered']);
+
+// get dead resource
+Route::get('/patients/dead', [PatientsController::class, 'dead']);
+
+// get detail resource
+Route::get('/patients/{id}', [PatientsController::class, 'show']);

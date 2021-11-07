@@ -118,4 +118,55 @@ class PatientsController extends Controller
             return response()->json($data, 404);
         }
     }
+
+    function positive()
+    {
+        $patients = Patients::where('status', 'positive')->get();
+        if (count($patients) > 0) {
+            $data = [
+                'message' => 'get positive patient',
+                'data' => $patients
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                'message' => "Data not found"
+            ];
+            return response()->json($data, 404);
+        }
+    }
+
+    function recovered()
+    {
+        $patients = Patients::where('status', 'recovered')->get();
+        if (count($patients) > 0) {
+            $data = [
+                'message' => 'get recovered patients',
+                'data' => $patients
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                'message' => "Data not found"
+            ];
+            return response()->json($data, 404);
+        }
+    }
+
+    function dead()
+    {
+        $patients = Patients::where('status', 'dead')->get();
+        if (count($patients) > 0) {
+            $data = [
+                'message' => 'get dead patients',
+                'data' => $patients
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                'message' => "Data not found"
+            ];
+            return response()->json($data, 404);
+        }
+    }
 }
