@@ -40,18 +40,18 @@ class PatientsController extends Controller
     # membuat method store
     function store(Request $request)
     {
-        # menangkap data request
-        $input = [
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'alamat' => $request->alamat,
-            'status' => $request->status,
-            'in_date_at' => $request->in_date_at,
-            'out_date_at' => $request->out_date_at
-        ];
+        # menangkap dan memvalidasi request
+        $validateData = $request->validate([
+            'name' => 'required',
+            'phone' => 'required | numeric',
+            'alamat' => 'required',
+            'status' => 'required',
+            'in_date_at' => 'required | date',
+            'out_date_at' => 'nullable'
+        ]);
 
         #menggunakan model Patients untuk insert data
-        $patient = Patients::create($input);
+        $patient = Patients::create($validateData);
         $data = [
             'message' => 'Resource is added successfully',
             'data' => $patient

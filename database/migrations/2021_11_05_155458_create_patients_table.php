@@ -20,7 +20,7 @@ class CreatePatientsTable extends Migration
             $table->text('alamat');
             $table->string('status');
             $table->date('in_date_at');
-            $table->date('out_date_at');
+            $table->date('out_date_at')->nullable();
             $table->timestamps();
         });
     }
