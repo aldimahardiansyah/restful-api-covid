@@ -44,4 +44,4 @@ Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_s
 Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
 
 // get detail resource
-Route::get('/patients/{id}', [PatientsController::class, 'search_by_status']);
+Route::get('/patients/{id}', [PatientsController::class, 'show']);
