@@ -199,25 +199,4 @@ class PatientsController extends Controller
             return response()->json($data, 404);
         }
     }
-
-    # membuat method positive
-    function positive()
-    {
-        # mengembalikan hasil dari memanggil method search_by_status dengan argumen positive
-        return $this->search_by_status('positive');
-    }
-
-    # membuat method recovered
-    function recovered()
-    {
-        # mengembalikan hasil dari memanggil method search_by_status dengan argumen recovered
-        return $this->search_by_status('recovered');
-    }
-
-    # membuat method dead
-    function dead()
-    {
-        # mengembalikan hasil dari memanggil method search_by_status dengan argumen dead
-        return $this->search_by_status('dead');
-    }
 }

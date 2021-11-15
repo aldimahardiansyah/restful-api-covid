@@ -35,13 +35,13 @@ Route::delete('/patients/{id}', [PatientsController::class, 'destroy']);
 Route::get('/patients/search/{name}', [PatientsController::class, 'search']);
 
 // get positive resource
-Route::get('/patients/positive', [PatientsController::class, 'positive']);
+Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
 
 // get recovered resource
-Route::get('/patients/recovered', [PatientsController::class, 'recovered']);
+Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
 
 // get dead resource
-Route::get('/patients/dead', [PatientsController::class, 'dead']);
+Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
 
 // get detail resource
-Route::get('/patients/{id}', [PatientsController::class, 'show']);
+Route::get('/patients/{id}', [PatientsController::class, 'search_by_status']);
