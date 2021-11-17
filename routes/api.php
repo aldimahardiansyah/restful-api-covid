@@ -16,36 +16,35 @@ use App\Http\Controllers\PatientsController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// authentication route
+Route::middleware(['auth:sanctum'])->group(function () {
+    // get all resource
+    Route::get('/patients', [PatientsController::class, 'index'])->middleware(['auth:sanctum']);
+
+    // add resource
+    Route::post('/patients', [PatientsController::class, 'store']);
+
+    // edit resource
+    Route::put('/patients/{id}', [PatientsController::class, 'update']);
+
+    // delete resource
+    Route::delete('/patients/{id}', [PatientsController::class, 'destroy']);
+
+    // search resource by name
+    Route::get('/patients/search/{name}', [PatientsController::class, 'search']);
+
+    // get positive resource
+    Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
+
+    // get recovered resource
+    Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
+
+    // get dead resource
+    Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
+
+    // get detail resource
+    Route::get('/patients/{id}', [PatientsController::class, 'show']);
 });
-
-// get all resource
-Route::get('/patients', [PatientsController::class, 'index']);
-
-// add resource
-Route::post('/patients', [PatientsController::class, 'store']);
-
-// edit resource
-Route::put('/patients/{id}', [PatientsController::class, 'update']);
-
-// delete resource
-Route::delete('/patients/{id}', [PatientsController::class, 'destroy']);
-
-// search resource by name
-Route::get('/patients/search/{name}', [PatientsController::class, 'search']);
-
-// get positive resource
-Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
-
-// get recovered resource
-Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
-
-// get dead resource
-Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_status']);
-
-// get detail resource
-Route::get('/patients/{id}', [PatientsController::class, 'show']);
 
 // register and login route
 Route::post('/register', [AuthController::class, 'register']);
