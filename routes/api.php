@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientsController;
@@ -45,3 +46,7 @@ Route::get('/patients/status/{status}', [PatientsController::class, 'search_by_s
 
 // get detail resource
 Route::get('/patients/{id}', [PatientsController::class, 'show']);
+
+// register and login route
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
