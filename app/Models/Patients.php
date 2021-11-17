@@ -10,5 +10,17 @@ class Patients extends Model
     use HasFactory;
 
     // medefinisikan property fillable untuk menggunakan mass asignment
-    protected $fillable = ['name', 'phone', 'alamat', 'status', 'in_date_at', 'out_date_at'];
+    protected $fillable = ['name', 'phone', 'address', 'status_id'];
+
+    # membuat relation one to many dari table patients ke table history
+    public function history()
+    {
+        return $this->hasMany(history::class);
+    }
+
+    # membuat relation reverse one to one ke tabel status
+    public function status()
+    {
+        return $this->belongsTo(status::class);
+    }
 }

@@ -4,11 +4,51 @@ namespace App\Http\Controllers;
 
 // mengimport model Patients
 // digunakan untuk berinteraksi dengan database
+
+use App\Models\history;
 use Illuminate\Http\Request;
 use App\Models\Patients;
+use App\Models\status;
+use Illuminate\Validation\Rule;
 
 class PatientsController extends Controller
 {
+    # membuat method untuk template output
+    function output($patient)
+    {
+        $result = [];
+        foreach ($patient as $patient) {
+            array_push($result, [
+                'id' => $patient->id,
+                'name' => $patient->name,
+                'phone' => $patient->phone,
+                'address' => $patient->address,
+
+                # mencari status berdasarkan status id
+                'status_id' => $patient->status->id,
+                'status' => status::find($patient->status_id)->status,
+                'in_date_at' => history::where('patients_id', $patient->id)->first()->in_date_at,
+                'out_date_at' => history::where('patients_id', $patient->id)->first()->out_date_at,
+                'updated_at' => $patient->updated_at,
+                'created_at' => $patient->created_at
+            ]);
+        }
+
+        return $result;
+    }
+
+    # membuat method untuk mencari status berdasarkan status_id
+    function search_status_id($status)
+    {
+        if (strtolower($status) == 'positive') {
+            return 1;
+        } else if (strtolower($status) == 'recovered') {
+            return 2;
+        } else if (strtolower($status) == 'dead') {
+            return 3;
+        }
+    }
+
     # membuat metod index
     function index()
     {
@@ -22,7 +62,7 @@ class PatientsController extends Controller
             $data = [
                 'message' => 'Get All Resource',
                 'total' => $total,
-                'data' => $patients
+                'data' => $this->output($patients)
             ];
 
             # mengirim data (json) dan kode 200
@@ -41,20 +81,40 @@ class PatientsController extends Controller
     function store(Request $request)
     {
         # menangkap dan memvalidasi request
-        $validateData = $request->validate([
+        $request->validate([
             'name' => 'required',
             'phone' => 'required | numeric',
-            'alamat' => 'required',
-            'status' => 'required',
+            'address' => 'required',
+            'status' => ['required', Rule::in(['positive', 'Positive', 'recovered', 'Recovered', 'dead', 'Dead'])],
             'in_date_at' => 'required | date',
-            'out_date_at' => 'nullable'
+            'out_date_at' => 'nullable | date'
         ]);
 
-        #menggunakan model Patients untuk insert data
-        $patient = Patients::create($validateData);
+
+        $inputPatient = [
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'status_id' => $this->search_status_id($request->status)
+        ];
+
+        # menggunakan model Patients untuk insert data
+        $patient = Patients::create($inputPatient);
+
+        $inputHistory = [
+            'in_date_at' => $request->in_date_at,
+            'out_date_at' => $request->out_date_at,
+            'patients_id' => $patient->id
+        ];
+
+        # menggunakan model history untuk insert data
+        history::create($inputHistory);
+
         $data = [
             'message' => 'Resource is added successfully',
-            'data' => $patient
+
+            # memanggil method output dengan argumen array dari patient
+            'data' => $this->output([$patient])
         ];
 
         # mengembalikan data (json) dan kode 201
