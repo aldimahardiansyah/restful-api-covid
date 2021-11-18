@@ -80,7 +80,7 @@ class PatientsController extends Controller
     # membuat method store
     function store(Request $request)
     {
-        # menangkap dan memvalidasi request
+        # memvalidasi request
         $request->validate([
             'name' => 'required',
             'phone' => 'required | numeric',
@@ -130,7 +130,7 @@ class PatientsController extends Controller
         if ($patient) {
             $data = [
                 'message' => 'Get Detail Resource',
-                'data' => $patient
+                'data' => $this->output([$patient])
             ];
 
             # mengembalikan data (json) dan kode 200
@@ -148,26 +148,43 @@ class PatientsController extends Controller
     # membuat method update
     function update($id, Request $request)
     {
+        # memvalidasi request status
+        $request->validate([
+            'status' => ['nullable', Rule::in(['positive', 'Positive', 'recovered', 'Recovered', 'dead', 'Dead'])]
+        ]);
+
         # mencari id patient yang ingin diupdate
         $patient = Patients::find($id);
 
         if ($patient) {
-            # menangkap data request
-            $input = [
+
+            # menangkap data untuk tabel patient
+            $input_patient = [
                 'name' => $request->name ?? $patient->name,
                 'phone' => $request->phone ?? $patient->phone,
-                'alamat' => $request->alamat ?? $patient->alamat,
-                'status' => $request->status ?? $patient->status,
-                'in_date_at' => $request->in_date_at ?? $patient->in_date_at,
-                'out_date_at' => $request->out_date_at ?? $patient->out_date_at
+                'address' => $request->address ?? $patient->address,
+                'status_id' => $this->search_status_id($request->status ?? $patient->status_id)
             ];
 
-            # melakukan update data
-            $patient->update($input);
+            # melakukan update data patient
+            $patient->update($input_patient);
+
+            # mencari history yang akan diupdate
+            $history = history::where('patients_id', $patient->id)->first();
+
+            # menangkap data untuk table history
+            $inputHistory = [
+                'in_date_at' => $request->in_date_at ?? $history->in_date_at,
+                'out_date_at' => $request->out_date_at ?? $history->out_date_at,
+                'patients_id' => $patient->id
+            ];
+
+            # melakukan update data history
+            $history->update($inputHistory);
 
             $data = [
                 'message' => 'Resource is update successfully',
-                'data' => $patient
+                'data' => $this->output([$patient])
             ];
 
             # mengembalikan data (json) dan kode 200
@@ -187,10 +204,12 @@ class PatientsController extends Controller
     {
         # mencari id patient yang ingin dihapus
         $patient =  Patients::find($id);
+        $history = history::where('patients_id', $id)->first();
 
         if ($patient) {
             # hapus patient tersebut
             $patient->delete();
+            $history->delete();
 
             $data = [
                 'message' => "Resource is delete successfully"
@@ -217,7 +236,7 @@ class PatientsController extends Controller
         if (count($patients) > 0) {
             $data = [
                 'message' => "Get searched resource",
-                'data' => $patients
+                'data' => $this->output($patients)
             ];
 
             # mengembalikan data (json) dan kode 200
@@ -236,7 +255,7 @@ class PatientsController extends Controller
     function search_by_status($status)
     {
         # mencari patients berdasarkan status
-        $patients = Patients::where('status', $status)->get();
+        $patients = Patients::where('status_id', $this->search_status_id($status))->get();
 
         # menghitung total hasil pencarian
         $total = count($patients);
@@ -245,7 +264,7 @@ class PatientsController extends Controller
             $data = [
                 'message' => "Get $status Resource",
                 'total' => $total,
-                'data' => $patients
+                'data' => $this->output($patients)
             ];
 
             # mengembalikan data (json) dan kode 200
