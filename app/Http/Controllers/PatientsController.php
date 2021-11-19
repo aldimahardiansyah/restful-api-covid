@@ -25,7 +25,7 @@ class PatientsController extends Controller
                 'address' => $patient->address,
 
                 # mencari status berdasarkan status id
-                'status_id' => $patient->status->id,
+                'status_id' => $patient->status_id,
                 'status' => status::find($patient->status_id)->status,
                 'in_date_at' => history::where('patients_id', $patient->id)->first()->in_date_at,
                 'out_date_at' => history::where('patients_id', $patient->id)->first()->out_date_at,
@@ -40,13 +40,8 @@ class PatientsController extends Controller
     # membuat method untuk mencari status berdasarkan status_id
     function search_status_id($status)
     {
-        if (strtolower($status) == 'positive') {
-            return 1;
-        } else if (strtolower($status) == 'recovered') {
-            return 2;
-        } else if (strtolower($status) == 'dead') {
-            return 3;
-        }
+        # mencari status jika tidak ada maka buat jadi status baru dan kembalikan id
+        return status::where('status', $status)->firstOrCreate(['status' => $status])->id;
     }
 
     # membuat metod index
@@ -163,7 +158,7 @@ class PatientsController extends Controller
                 'name' => $request->name ?? $patient->name,
                 'phone' => $request->phone ?? $patient->phone,
                 'address' => $request->address ?? $patient->address,
-                'status_id' => $this->search_status_id($request->status ?? $patient->status_id)
+                'status_id' => $this->search_status_id($request->status ?? status::find($patient->status_id)->status)
             ];
 
             # melakukan update data patient
